@@ -1,10 +1,11 @@
 import React from 'react';
 import { FilterInput, FilterTitle } from './Flter.styled';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateContacts } from 'components/redux/contactSlice';
+import { filterContact, updateContacts } from 'components/redux/contactSlice';
 
 export const Filter = () => {
   const dispatch = useDispatch();
+  const filter = useSelector(state => state.contacts.filter);
   const contacts = useSelector(state => state.contacts.contacts);
 
   const handleInputChange = event => {
@@ -13,7 +14,7 @@ export const Filter = () => {
     const filteredContacts = contacts.filter(contact =>
       contact.name.toLowerCase().includes(value.toLowerCase())
     );
-
+    dispatch(filterContact(value));
     dispatch(updateContacts(filteredContacts));
     
   };
@@ -21,7 +22,8 @@ export const Filter = () => {
   return (
     <>
       <FilterTitle>Find contact by name</FilterTitle>
-      <FilterInput onChange={handleInputChange} type="text" name="filter" />
+      <FilterInput onChange={handleInputChange} type="text" name="filter"           value={filter}
+	 />
     </>
   );
 };
