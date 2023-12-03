@@ -1,39 +1,27 @@
 import React from 'react';
-import { FilterInput ,FilterTitle} from './Flter.styled';
+import { FilterInput, FilterTitle } from './Flter.styled';
 import { useDispatch, useSelector } from 'react-redux';
-import { filterContact,updateContacts } from 'components/redux/contactSlice';
+import { updateContacts } from 'components/redux/contactSlice';
 
-
-export const Filter = () =>{
-
-  const filter = useSelector(state => state.contacts.filter);
+export const Filter = () => {
   const dispatch = useDispatch();
-  const contacts = useSelector((state) => state.contacts.contacts);
+  const contacts = useSelector(state => state.contacts.contacts);
 
-const handleInputChange = (event) => {
-  const { value } = event.target;
+  const handleInputChange = event => {
+    const { value } = event.target;
 
-  console.log(value)
+    const filteredContacts = contacts.filter(contact =>
+      contact.name.toLowerCase().includes(value.toLowerCase())
+    );
 
-  const filteredContacts = contacts.filter((contact) =>
-  contact.name.toLowerCase().includes(value.toLowerCase())
-);
+    dispatch(updateContacts(filteredContacts));
+    
+  };
 
-dispatch(filterContact(value));
-
-dispatch(updateContacts(filteredContacts));
-};
-
-
-    return(
-      <>
+  return (
+    <>
       <FilterTitle>Find contact by name</FilterTitle>
-        <FilterInput
-          onChange={handleInputChange}
-          type="text"
-          name="filter"
-          value={filter}
-        />
-        </>
-    )
-}
+      <FilterInput onChange={handleInputChange} type="text" name="filter" />
+    </>
+  );
+};
